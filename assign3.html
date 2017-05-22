@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>Starting with HTML Assignment</title>
+		<style>
+			form{
+				align:center;
+				text-align:left;
+			
+				border:5px solid black;
+				border-top-width:30px;
+				
+				font-size:20px;
+				font-family:helvetica;
+				
+			}
+			input[type=text]:focus,input[type=number]:focus,input[type=email]:focus,input[type=password]:focus,input[type=date]:focus,textarea:focus{
+				background-color:lightblue;
+			}
+			input[type=text],input[type=number],input[type=email],input[type=password],input[type=date],textarea{
+				border:2px solid black;
+				
+			}
+			#bttn{
+
+				font-family:courier;
+				font-size:30px;
+				color:black;
+				background-color:#008CBA;
+				border:1px solid black;
+				padding:5px;
+				text-align:center;
+				border-radius:10px;
+				
+			}
+			#bttn:hover{
+				background-color:white;
+				box-shadow:0px 20px 20px 0 rgba(0,0,0,0.2);
+			}
+			
+			legend{
+				text-align:left;
+				
+			}
+			fieldset{
+				border-color:red;
+			}
+			label{
+				display:inline-block;
+				width:200px;
+			}
+			
+		
+		</style>
+	</head>
+	<body>
+		<img src="msfi.png" alt="banner" width="60%" height="30%">
+		<img src="logo.jpg" alt="logo" width="50px" height="50px" style="float:right">
+		
+		<form action="assign2.html" method="post" >
+		<fieldset>
+			<legend>Name</legend>
+		
+			First<input type="text" name="firstname" placeholder="First Name" required>
+			Middle<input type="text" name="middlename" placeholder="Middle Name">
+			Last <input type="text" name="lastname" placeholder="Last Name" required>
+		
+		</fieldset>
+		<fieldset>
+			<legend>Communication</legend>
+			<label>Phone Number</label><input type="text" name="phoneno" maxlength="10" pattern="[0-9]{10}" required><br><br>
+			<label>Email Address</label><input type="email" name="email" required>
+		</fieldset>
+		<fieldset>
+			<legend>Personal Information</legend>
+				<label>Password</label><input type="password" maxlength="10" name="password" required><br><br>
+				<label>Date Of Birth</label><input type="date" name="dob" required><br><br>
+				<label>Gender</label><input type="radio" name="gender" value="Male" required>Male
+									 <input type="radio" name="gender" value="Female" required>Female
+		</fieldset>
+		<fieldset>
+			<legend>Corrospondence</legend>
+					<label>Current Address</label><textarea required></textarea><br><br>
+					<label>Permanent Address</label><textarea required></textarea><br><br>
+					<label>City</label><input type="text" name="city" placeholder="City Name" required><br><br>
+					<label>State</label><input type="text" name="state" placeholder="State Name" required><br><br>
+					<label>Country</label><input type="text" name="country" placeholder="Country Name" required><br><br>
+					<label>ZipCode</label><input type="text" name="zipcode" placeholder="Zipcode" required><br><br>
+					
+		</fieldset>
+		<fieldset>
+			<legend>Interests</legend>
+				<label>Personal Interests</label>
+												Sports<input type="checkbox" value="interest1" name="sports">
+												Books<input type="checkbox" value="interest2" name="books">
+												Computer and Softwares<input type="checkbox" value="interest3" name="computers and softwares">
+												Fashion<input type="checkbox" value="interest4" name="fashion">
+												Photography<input type="checkbox" value="interest5	" name="photography">
+												Gaming<input type="checkbox" value="interest6" name="Gaming">
+		</fieldset>
+			<br>
+			
+				<input type="submit" value="Submit"  id="bttn">
+				<input type="reset" id="bttn">
+			<br>
+		</form>
+		
+		
+	
+	</body>
+</html>
