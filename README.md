@@ -2,13 +2,13 @@
 All the assignments for HTML,CSS,Javascript
 
 
-assign1.html-
+Hosting_on_IIS.html-
 Create a website to host on the local machine with a simple post and get method (HTML only). It has to be hosted in IIS with HTTPS (self-signed). 
 
-assign2.html-
+Registration_form.html-
 Create one html page to show your name, your image and marks obtained in each semester. It should have a similar look that we have in a resume. You can use different font styles to give it a better look.
 
-assign3.html-
+Sample_CV.html-
 One of our client wants to create an online rewards application to sell different products to users. As the whole website development will take decent amount of time, our client wants to rollout the registration page to grab the user details so that it can occupy the market before the website launch.
 
 Please take a look at the specification provided below. Can you design a webpage by fulfilling the below requirements. As a developer you are given full freedom to create your own layout, design, colors, fonts etc. Make the page to look great.
@@ -19,7 +19,7 @@ This is what our customer specification says,
 Don’t forget to collect the password, date of birth and gender. We have to save user current address and permanent address with city, state, country and zip code.  That way we can find out how many users have registered from which area. It is not a bad idea to ask users for their personal interests, like, sports, books, computer & software, fashion, photography etc. You can add more such options for personal interests.
 User should able to select as many as personal interests they want. That way we can understand what they might order in future once the website is available. Place a beautifil logo(50px X 50px) on my website and a cool looking banner(banner height should not be more than 280px). I don't mind if you download it from somewhere for now. Our design team will provide the images later with the same pixel.”
 
-assign4.html-
+Registration_form_with_ExtCSS.html-
 
 Registration form should contain below input fields:
 
@@ -49,7 +49,7 @@ Subscribe news letter?(yes/ no)
 - There should be a button, which user will click to submit input data.
 
 
-assign5.html-
+Registration_form_with_InlineCSS.html-
 
 Copy registration form, created in Basic - Create a registration form assignment and use that to move forward in this assignment.
 
