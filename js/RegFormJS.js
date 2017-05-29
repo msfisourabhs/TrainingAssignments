@@ -3,8 +3,8 @@ firstName.addEventListener("blur",checkWord);
 firstName.addEventListener("focus",clearErrors);
 
 var lastName = document.getElementsByTagName('input')['lastname'];
-//lastName.addEventListener("blur",checkWord);
-//lastName.addEventListener("focus",clearErrors);
+lastName.addEventListener("blur",checkWord);
+lastName.addEventListener("focus",clearErrors);
 
 var pass = document.getElementsByName("user_password");
 var cpass = document.getElementsByName("user_confirm_password");
@@ -78,52 +78,13 @@ function checkNumber()
 }
 function generateErrors(errormssg , name)
 {
-			var index;
-			var error_code = 0;
-			var fs = document.getElementsByTagName('fieldset');
-			for(var i =0 ; i<fs.length;i++)
-			{
 			
-				for(var j =0;j<fs[i].childElementCount;j++)
-				{
-					if(fs[i].children[j] === name)
-					{
-						console.log(name);
-						index = j;
-						console.log(fs[i].children[j].previousElementSibling);
-						if(fs[i].children[j].previousElementSibling.className === "errors")
-							{	
-								
-								error_code = 1;
-								//console.log(j+1);
-								//break;
-							}
-						else
-								error_code = 0;
-									
-					}
-				}
-			//	if(error_code === 1)
-			//		break;
-			}
-			console.log(error_code);	
-			if(error_code === 0)
-			{
 					var em = document.createElement("p");
 					em.appendChild(document.createTextNode(errormssg));
 			
 					name.insertAdjacentElement('beforebegin',em);
 					em.setAttribute("class" , "errors");
-			}
-			else 
-			{
-					//console.log(document.getElementsByTagName('fieldset')[0].children[2]);
-					document.getElementsByTagName('fieldset')[0].children[index+1].style.visibility = "visible";
-					document.getElementsByTagName('fieldset')[0].children[index+1].style.display = "block";
-
-			}
-			
-			//name.focus();
+		
 			
 			return;
 }
@@ -131,6 +92,7 @@ function clearErrors()
 {
 			var fs = document.getElementsByTagName('fieldset');
 			//console.log("Entered");
+            
 			for(var i =0 ; i<fs.length;i++)
 			{
 			//		console.log(fs[i]);
@@ -139,11 +101,14 @@ function clearErrors()
 			//		console.log(fs[i].children[j],this);
 					if(fs[i].children[j] === this)
 					{
-						if(fs[i].children[j+1].className === "errors")
+						console.log(fs[i].children[j].previousElementSibling);
+						
+                        if(fs[i].children[j].previousElementSibling.className === "errors")
 						{
-							fs[i].children[j+1].style.display = "none";
-							fs[i].children[j+1].style.visibility = "hidden";
-							console.log("Hidden successfully");
+							fs[i].children[j].previousElementSibling.remove();
+							
+							
+                            console.log("Removed successfully");
 						}
 					}
 				}

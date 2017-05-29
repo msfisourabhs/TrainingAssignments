@@ -133,9 +133,6 @@ div.fixed{
 	font-weight:bold;
 				
 }
-div.errors{
-	visibility:hidden;
-	float:right;
-	color:red;
-	font-family:courier;
+*.errors{
+  color:red;
 }	
