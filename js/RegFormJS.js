@@ -1,3 +1,4 @@
+window.onload = createCaptcha();
 var firstName = document.getElementsByTagName('input')['firstname'];
 firstName.addEventListener("blur",checkWord);
 firstName.addEventListener("focus",clearErrors);
@@ -9,19 +10,28 @@ lastName.addEventListener("focus",clearErrors);
 var pass = document.getElementsByName("user_password");
 var cpass = document.getElementsByName("user_confirm_password");
 cpass[0].addEventListener("blur" , checkPass);
+pass[0].addEventListener("focus" , clearErrors);
+
 var pno = document.getElementsByName("phoneno");
 pno[0].addEventListener("blur",checkNumber);
+pno[0].addEventListener("focus",clearErrors);
+
 pno[1].addEventListener("blur",checkNumber);
+pno[1].addEventListener("focus",clearErrors);
+
+
 var city = document.getElementsByName("city");
 city[0].addEventListener("blur",checkWord);
-//console.log('Once');
+city[0].addEventListener("focus",clearErrors);
+
+
 function checkWord(){
 		var c;
-		//console.log(this.value);
+		
 		for(var i=0 ; i<this.value.length; i++)
 		{
 			
-			//console.log((firstName.value.charCodeAt(i)));
+			
 			var unicode = this.value.charCodeAt(i);
 			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122))
 					c = 1;
@@ -32,13 +42,8 @@ function checkWord(){
 			console.log('OK');
 		else
 		{
-			//clearErrors(this);
 			console.log('Dosen\'t contains letters');
-			//document.getElementsByClassName('errors').innerHTML = "Dosen\'t contains letters";
-			generateErrors("Dosen't contains letters",this);
-			//this.focus();
-			//clearErrors(this);
-				
+			generateErrors("Dosen't contains letters",this);	
 		}
 		return;
 }
@@ -58,14 +63,15 @@ function checkPass()
 }
 function checkNumber()
 {
+	var c = 1; 
 	for(var i = 0; i<this.value.length;i++)
 	{
-			var c = 1; 
+			
 			var unicode = this.value.charCodeAt(i);
 			if(unicode >=48 && unicode <= 57)
 				c=1;
 			else 
-				c=-1
+				c=-1;
 	}
 	if(c === 1)
 					console.log("Phone Number OK");
@@ -91,28 +97,49 @@ function generateErrors(errormssg , name)
 function clearErrors()
 {
 			var fs = document.getElementsByTagName('fieldset');
-			//console.log("Entered");
-            
 			for(var i =0 ; i<fs.length;i++)
 			{
-			//		console.log(fs[i]);
 				for(var j =0;j<fs[i].childElementCount;j++)
 				{
-			//		console.log(fs[i].children[j],this);
 					if(fs[i].children[j] === this)
 					{
-						console.log(fs[i].children[j].previousElementSibling);
 						
                         if(fs[i].children[j].previousElementSibling.className === "errors")
 						{
 							fs[i].children[j].previousElementSibling.remove();
-							
-							
-                            console.log("Removed successfully");
+							console.log("Removed successfully");
 						}
 					}
 				}
 			}
 			return;
+}
+function createCaptcha(){
+	var cap = document.getElementById("captcha");
+	var opvalue = function(){
+		var op = parseInt(Math.random() * (5 - 1) + 1);
+		if(op === 1)
+			return "+";
+		else if(op === 2)
+			return "-";
+		else if(op === 3)
+			return "*";
+		else
+			return "/";
+	};
+	cap.innerHTML = parseInt(Math.random()*10) + opvalue() + parseInt(Math.random()*10);
+	
+	
+}
+function checkCaptcha()
+{
+	if(parseInt(document.getElementsByName("capval")[0].value) === eval(document.getElementById("captcha").innerHTML))
+	{
+		document.getElementsByTagName("button")[2].removeAttribute('disabled');
+		
+	}
+	else
+		{}
+
 }
         

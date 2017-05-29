@@ -4,7 +4,7 @@
         <title>Sign Up Form</title>
         
         <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="../extCSS/main.css">
+        <link rel="stylesheet" href="css/main.css">
        
     </head>
     <body>
@@ -19,7 +19,7 @@
           <input type="text" class="fname" id="name" name="firstname" placeholder="First Name" required>
           
           <label for="name" class="required">Last Name:</label>
-          <input type="text"  name="lastname" placeholder="Last Name" required>
+          <input type="text" id="name" name="lastname" placeholder="Last Name" required>
           
           
           <label for="mail" class="required">Email:</label>
@@ -29,7 +29,7 @@
           <input type="password" id="password" name="user_password" required>
           
           <label for="password" class="required">Confirm Password:</label>
-          <input type="password"  name="user_confirm_password" required>
+          <input type="password" id="password" name="user_confirm_password" required>
           
           <label class="required" class="required">Gender</label><input type="radio" name="gender"  required>Male
 									 <input type="radio" name="gender" value="Female" required>Female	
@@ -46,44 +46,18 @@
           <label for="corrsp">Permanent Address</label>
           <textarea id="corrsp" name="paddress"></textarea>
           
+          <label class="required">Country</label>
+          <select name="country" class="countries order-alpha" id="countryId">
+   			 <option value="">Select Country</option>
+			</select>
+		  <label class="required">State</label>
+		  <select name="state" class="states order-alpha" id="stateId">
+  		     <option value="">Select State</option>
+		  </select>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+		<script src="//geodata.solutions/includes/countrystate.js"></script>
           <label class="required">City</label><input type="text" name="city" placeholder="City Name" required>
           
-          <label class="required">State</label><select class="state" name="state"  required>
-																<option value="ar">Arunachal Pradesh</option>
-																<option value="an">Andhra Pradesh</option>
-																<option value="as">Assam</option>
-																<option value="bi">Bihar</option>
-																<option value="ch">Chattisgarh</option>
-																<option value="go">Goa</option>
-																<option value="gu">Gujrat</option>
-																<option value="ha">Haryana</option>
-																<option value="hi">Himachal Pradesh</option>
-																<option value="ja">Jammu and Kashmir</option>
-																<option value="jh">Jharkhand</option>
-																<option value="ks">Karnataka</option>
-																<option value="ke">Kerala</option>
-																<option value="ms">Madhya Pradesh</option>
-																<option value="ma">Maharastra</option>
-																<option value="man">Manipur</option>
-																<option value="me">Meghalaya</option>
-																<option value="mi">Mizoram</option>
-																<option value="na">Nagaland</option>
-																<option value="od">Odisha</option>
-																<option value="pu">Punjab</option>
-																<option value="ra">Rajasthan</option>
-																<option value="si">Sikkim</option>
-																<option value="ta">Tamil Nadu</option>
-																<option value="te">Telangana</option>
-																<option value="tr">Tripura</option>
-																<option value="ut">Uttarakhand</option>
-																<option value="up">Uttar Pradesh</option>
-																<option value="wb">West Bengal</option>
-															</select>
-					<label class="required">Country</label><select class="country" name="country"  required>
-																<option value="IN">India</option>
-																<option value="an">USA</option>
-																<option value="as">Australia</option>
-															</select >
 					
           
           
@@ -103,15 +77,24 @@
           <input type="checkbox" id="computerandsoftwares" value="interest_computerandsoftwares" name="user_interest"><label class="light" for="computerandsoftwares">Computer and Softwares</label>
           
         </fieldset>
-        <button type="submit">Sign Up</button>
+        
+        <strong>Captcha </strong><br><br>
+        	<label id="captcha" style="display:inline-block;padding:10px 40px 0px 40px"> num1 operand num2</label>
+        	<button type="button" type="refresh" style="width:30%;display:inline-block;float:right;" onclick="createCaptcha()">Refresh</button><br><br><br><br>
+        	<input type="text" name="capval" placeholder="Enter the result for Captcha" style="display:inline-block;width:60%">
+        	<button type="button" type="Check" style="width:30%;display:inline-block;float:right" onclick="checkCaptcha()">Check</button>
+        	<label id="capmssg" ></label>
+        	
+        <button type="submit" disabled>Sign Up</button>
+		
       </form>
       <div class="fixed">
 			<p>* marked fields are mandatory</p>
 	  </div>
       <div class="errors">
-      		<p> error message</p>
+      		<p>error message</p>
       </div>
-      <script src="../js/RegFormJS.js"></script>
+      <script src="myjs.js"></script>
       
       
     </body>
