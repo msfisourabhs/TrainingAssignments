@@ -8,8 +8,8 @@
        
     </head>
     <body>
-
-      <form action="" method="get">
+	<p id="val"><p>
+      <form action="/validation.php" method="post" onsubmit="return validate()">
       
         <h1>Sign Up</h1>
         
@@ -26,10 +26,10 @@
           <input type="email" id="mail" name="user_email" placeholder="Email Address" required>
           
           <label for="password" class="required">Password:</label>
-          <input type="password" id="password" name="user_password" required>
+          <input type="password" id="password" name="user_password" maxlength="10" required>
           
           <label for="password" class="required">Confirm Password:</label>
-          <input type="password" id="password" name="user_confirm_password" required>
+          <input type="password" id="password" name="user_confirm_password" maxlength="10" required>
           
           <label class="required" class="required">Gender</label><input type="radio" name="gender"  required>Male
 									 <input type="radio" name="gender" value="Female" required>Female	
@@ -83,17 +83,15 @@
         	<button type="button" type="refresh" style="width:30%;display:inline-block;float:right;" onclick="createCaptcha()">Refresh</button><br><br><br><br>
         	<input type="text" name="capval" placeholder="Enter the result for Captcha" style="display:inline-block;width:60%">
         	<button type="button" type="Check" style="width:30%;display:inline-block;float:right" onclick="checkCaptcha()">Check</button>
-        	<label id="capmssg" ></label>
+        	<label id="capmssg"></label>
         	
-        <button type="submit" disabled>Sign Up</button>
+        <button type="submit" disabled " onclick="validate()">Sign Up</button>
 		
       </form>
       <div class="fixed">
 			<p>* marked fields are mandatory</p>
 	  </div>
-      <div class="errors">
-      		<p>error message</p>
-      </div>
+     
       <script src="../js/RegFormJS.js"></script>
       
       
