@@ -1,65 +1,75 @@
-window.onload = createCaptcha();
-var firstName = document.getElementsByTagName('input')['firstname'];
-firstName.addEventListener("blur",checkWord);
-firstName.addEventListener("focus",clearErrors);
+window.onload = addHandlers()
+function addHandlers()
+{
+	createCaptcha();
+	var firstName = document.getElementsByTagName('input')['firstname'];
+	firstName.addEventListener("blur",checkWord);	
+	firstName.addEventListener("focus",clearErrors);
 
-var lastName = document.getElementsByTagName('input')['lastname'];
-lastName.addEventListener("blur",checkWord);
-lastName.addEventListener("focus",clearErrors);
+	var lastName = document.getElementsByTagName('input')['lastname'];
+	lastName.addEventListener("blur",checkWord);
+	lastName.addEventListener("focus",clearErrors);
 
-var pass = document.getElementsByName("user_password");
-var cpass = document.getElementsByName("user_confirm_password");
-cpass[0].addEventListener("blur" , checkPass);
-pass[0].addEventListener("focus" , clearErrors);
+	var pass = document.getElementsByName("user_password");
+	var cpass = document.getElementsByName("user_confirm_password");
+	cpass[0].addEventListener("blur" , checkPass);
+	pass[0].addEventListener("focus" , clearErrors);
+	cpass[0].addEventListener("focus" , clearErrors);
+	
+	var pno = document.getElementsByName("phoneno");
+	pno[0].addEventListener("blur",checkNumber);
+	pno[0].addEventListener("focus",clearErrors);
 
-var pno = document.getElementsByName("phoneno");
-pno[0].addEventListener("blur",checkNumber);
-pno[0].addEventListener("focus",clearErrors);
-
-pno[1].addEventListener("blur",checkNumber);
-pno[1].addEventListener("focus",clearErrors);
+	pno[1].addEventListener("blur",checkNumber);
+	pno[1].addEventListener("focus",clearErrors);
 
 
-var city = document.getElementsByName("city");
-city[0].addEventListener("blur",checkWord);
-city[0].addEventListener("focus",clearErrors);
+	var city = document.getElementsByName("city");
+	city[0].addEventListener("blur",checkWord);
+	city[0].addEventListener("focus",clearErrors);
 
-var email = document.getElementById("mail");
-email.addEventListener("blur",checkRest)
-email.addEventListener("focus",clearErrors);
+	var email = document.getElementById("mail");
+	email.addEventListener("blur",checkRest)
+	email.addEventListener("focus",clearErrors);
 
 //var geneder = document.getElementsByName('gender');
-var caddr = document.getElementsByName("caddress");
-caddr[0].addEventListener("blur",checkRest);
-caddr[0].addEventListener("focus",clearErrors);
+	var caddr = document.getElementsByName("caddress");
+	caddr[0].addEventListener("blur",checkRest);
+	caddr[0].addEventListener("focus",clearErrors);
 
-var paddr = document.getElementsByName("paddress");
-paddr[0].addEventListener("blur",checkRest);
-paddr[0].addEventListener("focus",clearErrors);
+	var paddr = document.getElementsByName("paddress");
+	paddr[0].addEventListener("blur",checkRest);
+	paddr[0].addEventListener("focus",clearErrors);
 
-var country = document.getElementsByName("country");
-country[0].addEventListener("blur",checkRest);
-country[0].addEventListener("focus",clearErrors);
+	var country = document.getElementsByName("country");
+	country[0].addEventListener("blur",checkRest);
+	country[0].addEventListener("focus",clearErrors);
 
-var state = document.getElementsByName("state");
-state[0].addEventListener("blur",checkRest);
-state[0].addEventListener("focus",clearErrors);
-
-
+	var state = document.getElementsByName("state");
+	state[0].addEventListener("blur",checkRest);
+	state[0].addEventListener("focus",clearErrors);
+	
+	return;
+}
 function checkWord(){
-		var c;
+		var c=0;
 		
 		for(var i=0 ; i<this.value.length; i++)
 		{
 			var unicode = this.value.charCodeAt(i);
 			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122))
-					c = 1;
-			else
-				c = -1;
+					c++;
 		}
-		if(c === 1)
-			console.log('OK');
+		console.log(c === this.value.length);
 
+
+		if(this.value.length === 0)
+		{
+			console.log('Dosen\'t contains letters');
+			generateErrors("Dosen't contains letters",this);	
+		}
+		else if(c === this.value.length)
+			console.log('OK');
 		else
 		{
 			console.log('Dosen\'t contains letters');
@@ -69,6 +79,9 @@ function checkWord(){
 }
 function checkPass()
 {
+	var pass = document.getElementsByName("user_password");
+	var cpass = document.getElementsByName("user_confirm_password");
+	
 	if(pass[0].value.length === 0 || cpass[0].value.length === 0)
 	{
 		generateErrors("",pass[0]);
@@ -92,6 +105,7 @@ function checkPass()
 function checkNumber()
 {
 	var c = 1; 
+	var pno = document.getElementsByName("phoneno");
 	if(this.value.length === 0)
 		generateErrors("",this);
 	else if(this.value.length < 10)
@@ -105,11 +119,9 @@ function checkNumber()
 			
 			var unicode = this.value.charCodeAt(i);
 			if(unicode >=48 && unicode <= 57)
-				c=1;
-			else 
-				c=-1;
+				c++;
 		}
-		if(c === 1)
+		if(c === this.value.length)
 			console.log("Phone Number OK");
 		else
 		{
@@ -122,16 +134,11 @@ function checkNumber()
 function generateErrors(errormssg , name)
 {
 	var em = document.createElement("p");
-	if(name.value === "")
-	{
+	if(name.hasAttribute("required") && name.value === "")
 		em.appendChild(document.createTextNode("This field cannot be empty"));
-		console.log(name.value,'1');
-	}
 	else	
-	{
 		em.appendChild(document.createTextNode(errormssg));
-		console.log(name.value,'2');
-	}
+	
 	name.insertAdjacentElement('beforebegin',em);
 	em.setAttribute("class" , "errors");
 		
@@ -139,23 +146,22 @@ function generateErrors(errormssg , name)
 }
 function clearErrors()
 {
-			var fs = document.getElementsByTagName('fieldset');
-			for(var i =0 ; i<fs.length;i++)
-			{
-				for(var j =0;j<fs[i].childElementCount;j++)
+	var fs = document.getElementsByTagName('fieldset');
+	for(var i =0 ; i<fs.length;i++)
+	{
+		for(var j =0;j<fs[i].childElementCount;j++)
+		{
+			if(fs[i].children[j] === this)
+			{			
+                if(fs[i].children[j].previousElementSibling.className === "errors")
 				{
-					if(fs[i].children[j] === this)
-					{
-						
-                        if(fs[i].children[j].previousElementSibling.className === "errors")
-						{
-							fs[i].children[j].previousElementSibling.remove();
-							console.log("Removed successfully");
-						}
-					}
+					fs[i].children[j].previousElementSibling.remove();
+						console.log("Removed successfully");
 				}
 			}
-			return;
+		}
+	}
+	return;
 }
 function createCaptcha()
 {
@@ -197,6 +203,7 @@ function checkCaptcha()
 }
 function validate()
 {
+	console.log("validation called");
 	var c = 0;
 	var lbl = document.getElementsByTagName('label');
 	for(var i = 0;i<lbl.length;i++)
@@ -205,18 +212,27 @@ function validate()
 		{
 			if(lbl[i].nextElementSibling.className === "errors")
 			{
-				document.getElementById("val").innerHTML = "There were errors in your submission";
-				document.getElementById("val").setAttribute("class","valmssg");
-				document.body.scrollTop = "0";
+				
 				c++;
 			}
 			
 		}
 	}
 	if(c === 0)
-		return true;
+	{
+		alert("Registered successfully");
+		console.log("Valodation successful");
+		return true;	
+		
+	}
 	else
+	{
+		document.getElementById("val").innerHTML = "There were errors in your submission";
+		document.getElementById("val").setAttribute("class","valmssg");
+		document.body.scrollTop = "0";
+	
 		return false;
+	}
 }
 function checkRest()
 {
