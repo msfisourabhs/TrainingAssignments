@@ -104,7 +104,7 @@ function checkPass()
 }
 function checkNumber()
 {
-	var c = 1; 
+	var c = 0; 
 	var pno = document.getElementsByName("phoneno");
 	if(this.value.length === 0)
 		generateErrors("",this);
@@ -183,22 +183,24 @@ function createCaptcha()
 }
 function checkCaptcha()
 {
-	document.getElementById("capmssg").style.visibility = "initial";
-		document.getElementById("capmssg").style.display = "block";
+		var capmssg = document.getElementById("capmssg");
+		capmssg.style.visibility = "initial";
+		capmssg.style.display = "block";
 
-	if(parseInt(parseInt(document.getElementsByName("capval")[0].value)) === parseInt(eval(document.getElementById("captcha").innerHTML)))
+	if((document.getElementsByName("capval")[0].value) === (eval(document.getElementById("captcha").innerHTML)).toString())
+	
 	{
 		document.getElementsByTagName("button")[2].removeAttribute('disabled');
-		document.getElementById("capmssg").innerHTML = " &#10004 Captcha Input was Ok.You can Sign Up Now";
-		document.getElementById("capmssg").style.color = "Green";
+		capmssg.innerHTML = " &#10004 Captcha Input was Ok.You can Sign Up Now";
+		capmssg.style.color = "Green";
 		//document.getElementById("capmssg").style.animationName = "example";
 		
 	}
 	else
 	{
-		document.getElementById("capmssg").innerHTML = " &#10006 Captcha input was incorrect.Please try again.";
 		document.getElementsByTagName("button")[2].setAttribute("disabled","true");
-		document.getElementById("capmssg").style.color = "Red";
+		capmssg.innerHTML = " &#10006 Captcha input was incorrect.Please try again.";
+		capmssg.style.color = "Red";
 		createCaptcha();
 		
 	}
