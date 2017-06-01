@@ -8,6 +8,10 @@ function addHandlers(){
 	
 	$("#cpassword").bind("blur",checkPass);
 	$("#cpassword").bind("focus",clearErrors);
+	$("#password").bind("focus",clearErrors);
+	
+	$("#mail").bind("blur",checkRest);
+	$("#mail").bind("focus",clearErrors);
 	
 	
 	$(".phoneno").bind("blur",checkNumber);
@@ -55,23 +59,30 @@ function createCaptcha()
 
 function checkCaptcha()
 {
-	if(parseInt(parseInt($("#capval").val())) === parseInt(eval($("#captcha").html())))
+	var capmssg = $("#capmssg");
+	capmssg.css("visibility","initial");
+	capmssg.css("display","block");
+
+	if(($("#capval").val()) === parseInt(eval($("#captcha").html())).toString())
 	{
 		$("button")[2].removeAttribute = "disabled";
-		$("#capmssg").html(" &#10004 Captcha Input was Ok.You can Sign Up Now");
-		$("#capmssg").css("color","Green");
+		capmssg.html(" &#10004 Captcha Input was Ok.You can Sign Up Now");
+		capmssg.css("color","Green");
 		//document.getElementById("capmssg").style.animationName = "example";
 		
 	}
 	else
 	{
-		$("#capmssg").html(" &#10006 Captcha input was incorrect.Please try again.");
 		$("button")[2].setAttribute("disabled","true");
-		$("#capmssg").css("color","Red");
+		capmssg.html(" &#10006 Captcha input was incorrect.Please try again.");
+		capmssg.css("color","Red");
 		createCaptcha();
 		
 	}
-
+	setTimeout(function(){
+		capmssg.css("visibility","hidden");
+		capmssg.css("display","none");
+	},5000);
 }
 
 
@@ -166,21 +177,15 @@ function generateErrors(errormssg,name)
 }
 function clearErrors()
 {
-	var fs = document.getElementsByTagName('fieldset');
-	for(var i =0 ; i<fs.length;i++)
+	var err = $("fieldset").find("p");
+	for(var i =0 ; i<err.length;i++)
 	{
-		for(var j =0;j<fs[i].childElementCount;j++)
-		{
-			
-			if(fs[i].children[j] === this)
-			{			
-                if(fs[i].children[j].previousElementSibling.className === "errors")
-				{
-					fs[i].children[j].previousElementSibling.remove();
-					console.log("Removed successfully");
-				}
-			}
+		if(err.eq(i).next()[0] === this)
+		{			
+			err[i].remove();
+			console.log("Removed successfully");
 		}
+		
 	}
 	return;
 }
@@ -189,3 +194,40 @@ function checkRest()
 	if(this.value.length === 0)
 		generateErrors("",this);
 }
+
+function validate()
+{
+	console.log("validation called");
+	var c = 0;
+	//var lbl = document.getElementsByTagName('label');
+	var err  = $("fieldset").find("p");
+	for(var i = 0;i<lbl.length;i++)
+	{
+		if(lbl[i].className === "required")
+		{
+			if(lbl[i].nextElementSibling.className === "errors")
+			{
+				
+				c++;
+			}
+			
+		}
+	}
+	if(c === 0)
+	{
+		alert("Registered successfully");
+		console.log("Valodation successful");
+		return true;	
+		
+	}
+	else
+	{
+		document.getElementById("val").innerHTML = "There were errors in your submission";
+		document.getElementById("val").setAttribute("class","valmssg");
+		document.body.scrollTop = "0";
+	
+		return false;
+	}
+}
+
+

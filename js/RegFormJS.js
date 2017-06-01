@@ -32,7 +32,6 @@ function addHandlers()
 	email.addEventListener("blur",checkRest);
 	email.addEventListener("focus",clearErrors);
 
-//var geneder = document.getElementsByName('gender');
 	var caddr = document.getElementsByName("caddress");
 	caddr[0].addEventListener("blur",checkRest);
 	caddr[0].addEventListener("focus",clearErrors);
@@ -52,30 +51,22 @@ function addHandlers()
 	return;
 }
 function checkWord(){
-		var c=0;
-		
-		for(var i=0 ; i<this.value.length; i++)
+		var counter=0;
+		var len = this.value.length;
+		for(var iterator=0 ; iterator<len; iterator++)
 		{
-			var unicode = this.value.charCodeAt(i);
+			var unicode = this.value.charCodeAt(iterator);
 			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122))
-					c++;
+					counter++;
 		}
-		console.log(c === this.value.length);
-
-
-		if(this.value.length === 0)
-		{
-			console.log('Dosen\'t contains letters');
-			generateErrors("Dosen't contains letters",this);	
-		}
-		else if(c === this.value.length)
-			console.log('OK');
-		else
-		{
-			console.log('Dosen\'t contains letters');
-			generateErrors("Dosen't contains letters",this);	
-		}
-		return;
+		
+		if(len === 0)
+			//generateErrors("",this);
+		
+		if(counter !== len)
+			generateErrors("Does not contain letters",this);
+			
+	return;
 }
 function checkPass()
 {
@@ -89,52 +80,42 @@ function checkPass()
 	}
 	else
 	{
-		if(pass[0].value === cpass[0].value)
-		{
-					console.log("Passwords Ok");
-		}
-		else
-		{
-			console.log("Passwords don't match");
-			generateErrors("Passwords don't match",pass[0]);
-				
-		}
+		if(pass[0].value !== cpass[0].value)
+			generateErrors("Passwords do not match",pass[0]);		
+	
 		return;
 	}
 }
 function checkNumber()
 {
-	var c = 0; 
+	var counter = 0;
+	var len = this.value.length;
 	var pno = document.getElementsByName("phoneno");
-	if(this.value.length === 0)
+	if(len === 0)
 		generateErrors("",this);
-	else if(this.value.length < 10)
+	else if(len < 10)
 		generateErrors("Field cannot be less than 10 digits" , this);
 	else if(pno[0].value === pno[1].value)
 		generateErrors("Number should be different form primary number",pno[1]);
 	else
 	{
-		for(var i = 0; i<this.value.length;i++)
+		for(var iterator = 0; iterator<len ; iterator++)
 		{
 			
-			var unicode = this.value.charCodeAt(i);
+			var unicode = this.value.charCodeAt(iterator);
 			if(unicode >=48 && unicode <= 57)
-				c++;
+				counter++;
 		}
-		if(c === this.value.length)
-			console.log("Phone Number OK");
-		else
-		{
-			console.log("Phone Number dosen't contains number");
-			generateErrors("Phone Number dosen't contains number",this);
-		}
+		if(counter !== len)
+			generateErrors("Phone Number does not contain numbers",this);
+		
 	}
 	return;
 }
-function generateErrors(errormssg , name)
+function generateErrors(errormssg,name)
 {
 	var em = document.createElement("p");
-	if(name.hasAttribute("required") && name.value === "")
+	if(name.classList.contains("required") && name.value.length === 0)
 		em.appendChild(document.createTextNode("This field cannot be empty"));
 	else	
 		em.appendChild(document.createTextNode(errormssg));
@@ -153,11 +134,8 @@ function clearErrors()
 		{
 			if(fs[i].children[j] === this)
 			{			
-                if(fs[i].children[j].previousElementSibling.className === "errors")
-				{
+                if(fs[i].children[j].previousElementSibling.classList.contains("errors"))
 					fs[i].children[j].previousElementSibling.remove();
-						console.log("Removed successfully");
-				}
 			}
 		}
 	}
@@ -167,7 +145,7 @@ function createCaptcha()
 {
 	var cap = document.getElementById("captcha");
 	var opvalue = function(){
-		var op = parseInt(Math.random() * (5 - 1) + 1);
+		var op = parseInt(Math.random() * (4) + 1);
 		if(op === 1)
 			return "+";
 		else if(op === 2)
@@ -183,55 +161,51 @@ function createCaptcha()
 }
 function checkCaptcha()
 {
-		var capmssg = document.getElementById("capmssg");
-		capmssg.style.visibility = "initial";
-		capmssg.style.display = "block";
+	var capmssg = document.getElementById("capmssg");
+	capmssg.style.visibility = "initial";
+	capmssg.style.display = "block";
 
-	if((document.getElementsByName("capval")[0].value) === (eval(document.getElementById("captcha").innerHTML)).toString())
-	
+	if((document.getElementsByName("capval")[0].value) === parseInt(eval(document.getElementById("captcha").innerHTML)).toString())
 	{
-		document.getElementsByTagName("button")[2].removeAttribute('disabled');
+		document.getElementById('submitbttn').removeAttribute('disabled');
 		capmssg.innerHTML = " &#10004 Captcha Input was Ok.You can Sign Up Now";
 		capmssg.style.color = "Green";
-		//document.getElementById("capmssg").style.animationName = "example";
-		
 	}
 	else
 	{
-		document.getElementsByTagName("button")[2].setAttribute("disabled","true");
+		document.getElementById("submitbttn").setAttribute("disabled","true");
 		capmssg.innerHTML = " &#10006 Captcha input was incorrect.Please try again.";
 		capmssg.style.color = "Red";
-		createCaptcha();
-		
+		createCaptcha();	
 	}
-//	document.getElementById("capmssg").style.animationName = "hide";
 	setTimeout(function(){
-		document.getElementById("capmssg").style.visibility = "hidden";
-		document.getElementById("capmssg").style.display = "none";
-},5000);	
+		capmssg.style.visibility = "hidden";
+		capmssg.style.display = "none";
+	},5000);	
 
 }
 function validate()
 {
-	console.log("validation called");
-	var c = 0;
+	var counter = 0;
 	var lbl = document.getElementsByTagName('label');
-	for(var i = 0;i<lbl.length;i++)
+	var inputs = document.getElementsByName("input");
+	for(var iterator = 0;iterator<inputs.length;iterator++)
 	{
-		if(lbl[i].className === "required")
+		console.log('called');
+		checkEmptyAndSpaces(inputs[iterator]);
+	}
+	for(var iterator = 0;iterator<lbl.length;iterator++)
+	{
+		if(lbl[iterator].classList.contains("required"))
 		{
-			if(lbl[i].nextElementSibling.className === "errors")
-			{
-				
-				c++;
-			}
-			
+			if(lbl[iterator].nextElementSibling.classList.contains("errors"))
+				counter++;
 		}
 	}
-	if(c === 0)
+	
+	if(counter === 0)
 	{
 		alert("Registered successfully");
-		console.log("Valodation successful");
 		return true;	
 		
 	}
@@ -243,10 +217,26 @@ function validate()
 	
 		return false;
 	}
+	
 }
 function checkRest()
 {
 	if(this.value.length === 0)
 		generateErrors("",this);
+}
+function checkEmptyAndSpaces(name)
+{
+	//for(var iterator = 0;iterator < len ; iterator++)
+	var val = name.value.trim();
+	var len = val.length;
 	
+	if(len === 0)
+	{
+		name.value = val;
+		generateErrors("",name);
+	}
+	else
+	{
+		name.value = val.substring(0,val.indexOf(" ")) + val.substring(val.lastIndexOf(" "),len);
+	}
 }    
