@@ -1,4 +1,6 @@
 window.onload = addHandlers();
+
+	
 function addHandlers()
 {
 	createCaptcha();
@@ -29,7 +31,7 @@ function addHandlers()
 	city[0].addEventListener("focus",clearErrors);
 
 	var email = document.getElementById("mail");
-	email.addEventListener("blur",checkRest);
+	email.addEventListener("blur",checkEmail);
 	email.addEventListener("focus",clearErrors);
 
 	var caddr = document.getElementsByName("caddress");
@@ -50,7 +52,9 @@ function addHandlers()
 	
 	return;
 }
-function checkWord(){
+function checkWord()
+{
+		checkEmptyAndSpaces(this);
 		var counter=0;
 		var len = this.value.length;
 		for(var iterator=0 ; iterator<len; iterator++)
@@ -60,9 +64,6 @@ function checkWord(){
 					counter++;
 		}
 		
-		if(len === 0)
-			//generateErrors("",this);
-		
 		if(counter !== len)
 			generateErrors("Does not contain letters",this);
 			
@@ -70,32 +71,30 @@ function checkWord(){
 }
 function checkPass()
 {
+	
 	var pass = document.getElementsByName("user_password");
 	var cpass = document.getElementsByName("user_confirm_password");
+	checkEmptyAndSpaces(pass[0]);
+	checkEmptyAndSpaces(cpass[0]);
 	
-	if(pass[0].value.length === 0 || cpass[0].value.length === 0)
-	{
-		generateErrors("",pass[0]);
-		generateErrors("",cpass[0]);
-	}
-	else
-	{
-		if(pass[0].value !== cpass[0].value)
-			generateErrors("Passwords do not match",pass[0]);		
+
+	if(pass[0].value !== cpass[0].value)
+		generateErrors("Passwords do not match",pass[0]);		
 	
-		return;
-	}
+	return;
+	
 }
 function checkNumber()
 {
+	
 	var counter = 0;
 	var len = this.value.length;
 	var pno = document.getElementsByName("phoneno");
-	if(len === 0)
-		generateErrors("",this);
-	else if(len < 10)
+	checkEmptyAndSpaces(this);
+	//checkEmptyAndSpaces(pno[1]);
+	if(len < 10 && len > 0)
 		generateErrors("Field cannot be less than 10 digits" , this);
-	else if(pno[0].value === pno[1].value)
+	else if(pno[0].value === pno[1].value && len > 0)
 		generateErrors("Number should be different form primary number",pno[1]);
 	else
 	{
@@ -112,6 +111,86 @@ function checkNumber()
 	}
 	return;
 }
+function checkEmail()
+{
+	
+	checkEmptyAndSpaces(this);
+	var counter_d=0,counter_p=0;
+	var val = this.value;
+	var atloc = val.indexOf("@");
+	var charAllowed = ["!","#","$","%","&","'","*","+","-","/","=","?","^","_","`","{","}","|","~"];
+	if(atloc === 0 || atloc === val.length-1 || atloc !== val.lastIndexOf("@") || atloc === -1)
+	{
+		generateErrors("Invalid Email Address",this);
+		return;
+	}
+	var personalInfo = val.split("@")[0];
+	var domainInfo = val.split("@")[1];
+	var checkPinfo = function(){
+		for(var iterator = 0 ; iterator<personalInfo.length ; iterator++)
+		{
+			var unicode = personalInfo.charCodeAt(iterator);
+		
+			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122) || (charAllowed.indexOf(personalInfo[iterator]) !== -1) || (unicode>=48 && unicode<=57))
+			{
+				if(iterator === 0 )
+					console.log("Entered1");
+				counter_p++;
+		//		console.log()
+			}
+			if(unicode === 46)
+			{
+				
+				if(iterator !== 0 || iterator !== personalInfo.length-1 || (personalInfo[iterator+1] !== "."))
+				{
+					console.log(iterator !== 0 || iterator !== personalInfo.length-1 );
+					if(iterator === 0 )
+						console.log(iterator,"Entered2");
+				
+					counter_p++;
+					//console.log("Executed");
+				}
+			}
+		}
+		console.log(counter_p);
+	
+		if(counter_p !== personalInfo.length)
+			return false;
+		else
+			return true;
+	};
+	
+	
+	var checkDinfo = function(){
+		for(var iterator = 0 ; iterator<domainInfo.length ; iterator++)
+		{
+			var unicode = domainInfo.charCodeAt(iterator);
+			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122) || (unicode === 45) || (unicode>=48 && unicode<=57))
+				counter_d++;
+			
+			if(unicode === 46)
+			{
+	//			console.log(iterator,unicode);
+				if(iterator !== 0 || iterator !== domainInfo.length-1 || (domainInfo[iterator+1] !== ".") || (domainInfo[iterator+2] !== "."))
+					counter_d++;
+			}
+			
+		
+		}
+		console.log(counter_d);
+	
+		if(counter_d !== domainInfo.length)
+			return false;
+		else
+			return true;
+	};
+	
+	if(checkDinfo() === false || checkPinfo() === false)
+		generateErrors("Invalid Email Address",this);
+	console.log(counter_p,counter_d);
+	
+	return;
+}
 function generateErrors(errormssg,name)
 {
 	var em = document.createElement("p");
@@ -125,6 +204,7 @@ function generateErrors(errormssg,name)
 		
 	return;
 }
+
 function clearErrors()
 {
 	var fs = document.getElementsByTagName('fieldset');
@@ -188,10 +268,10 @@ function validate()
 {
 	var counter = 0;
 	var lbl = document.getElementsByTagName('label');
-	var inputs = document.getElementsByName("input");
+	var inputs = document.getElementsByTagName("input");
 	for(var iterator = 0;iterator<inputs.length;iterator++)
 	{
-		console.log('called');
+		clearErrors.call(inputs[iterator]);
 		checkEmptyAndSpaces(inputs[iterator]);
 	}
 	for(var iterator = 0;iterator<lbl.length;iterator++)
@@ -221,22 +301,24 @@ function validate()
 }
 function checkRest()
 {
-	if(this.value.length === 0)
-		generateErrors("",this);
+	checkEmptyAndSpaces(this);
 }
 function checkEmptyAndSpaces(name)
 {
-	//for(var iterator = 0;iterator < len ; iterator++)
-	var val = name.value.trim();
-	var len = val.length;
 	
-	if(len === 0)
+	var val = name.value;
+	var len = name.value.length;
+	var temp = "";
+	for(iterator = 0 ; iterator < len ; iterator++)
 	{
-		name.value = val;
+		if(val.charAt(iterator) !== " ")
+			temp +=  val.charAt(iterator).toString();
+	}
+	name.value = temp;
+	if(temp.length === 0)
 		generateErrors("",name);
-	}
-	else
-	{
-		name.value = val.substring(0,val.indexOf(" ")) + val.substring(val.lastIndexOf(" "),len);
-	}
-}    
+
+	return;
+	
+}
+    

@@ -201,9 +201,9 @@ function validate()
 	var c = 0;
 	//var lbl = document.getElementsByTagName('label');
 	var err  = $("fieldset").find("p");
-	for(var i = 0;i<lbl.length;i++)
+	for(var i = 0;i<err.length;i++)
 	{
-		if(lbl[i].className === "required")
+		if(err[i].className === "required")
 		{
 			if(lbl[i].nextElementSibling.className === "errors")
 			{
