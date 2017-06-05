@@ -86,55 +86,36 @@ function checkCaptcha()
 }
 
 
-function checkWord(){
-		var c=0;
-		
-		for(var i=0 ; i<this.value.length; i++)
+function checkWord()
+{
+		if(checkEmptyAndSpaces(this))
+			return;
+		var counter=0;
+		var len = this.value.length;
+		for(var iterator=0 ; iterator<len; iterator++)
 		{
-			var unicode = this.value.charCodeAt(i);
+			var unicode = this.value.charCodeAt(iterator);
 			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122))
-					c++;
+					counter++;
 		}
-		if(this.value.length === 0)
-		{
-			console.log('Dosen\'t contains letters');
-			generateErrors("Dosen't contains letters",this);	
-		}
-		else if(c === this.value.length)
-			console.log('OK');
-
-		else
-		{
-			console.log('Dosen\'t contains letters');
-			generateErrors("Dosen't contains letters",this);	
-		}
-		return;
+		
+		if(counter !== len)
+			generateErrors("Does not contain letters",this);
+			
+	return;
 }
 
 function checkPass()
 {
 	var pass = $(".pass");
+	checkEmptyAndSpaces(this);
+	if(pass[0].value !== pass[1].value)
+		generateErrors("Passwords do not match",pass[1]);		
 	
-	if(pass[0].value.length === 0 || pass[1].value.length === 0)
-	{
-		generateErrors("",pass[0]);
-		generateErrors("",pass[1]);
-	}
-	else
-	{
-		if(pass[0].value === pass[1].value)
-		{
-			console.log("Passwords Ok");
-		}
-		else
-		{
-			console.log("Passwords don't match");
-			generateErrors("Passwords don't match",pass[0]);
-				
-		}
-		return;
-	}
-}
+	return;
+	
+}	
+	
 
 function checkNumber()
 {
@@ -228,6 +209,27 @@ function validate()
 	
 		return false;
 	}
+}
+function checkEmptyAndSpaces(name)
+{
+	
+	var val = name.value;
+	var len = name.value.length;
+	var temp = "";
+	for(iterator = 0 ; iterator < len ; iterator++)
+	{
+		if(val.charAt(iterator) !== " ")
+			temp +=  val.charAt(iterator).toString();
+	}
+	name.value = temp;
+	if(temp.length === 0)
+	{	
+		generateErrors("",name);
+		return true;
+	}
+	else
+		return false;
+	
 }
 
 

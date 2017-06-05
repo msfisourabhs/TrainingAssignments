@@ -14,9 +14,13 @@ function addHandlers()
 
 	var pass = document.getElementsByName("user_password");
 	var cpass = document.getElementsByName("user_confirm_password");
-	cpass[0].addEventListener("blur" , checkPass);
 	pass[0].addEventListener("focus" , clearErrors);
+	pass[0].addEventListener("blur" , checkRest);
+	
 	cpass[0].addEventListener("focus" , clearErrors);
+	cpass[0].addEventListener("blur" , checkPass);
+	
+	
 	
 	var pno = document.getElementsByName("phoneno");
 	pno[0].addEventListener("blur",checkNumber);
@@ -54,7 +58,8 @@ function addHandlers()
 }
 function checkWord()
 {
-		checkEmptyAndSpaces(this);
+		if(checkEmptyAndSpaces(this))
+			return;
 		var counter=0;
 		var len = this.value.length;
 		for(var iterator=0 ; iterator<len; iterator++)
@@ -74,8 +79,8 @@ function checkPass()
 	
 	var pass = document.getElementsByName("user_password");
 	var cpass = document.getElementsByName("user_confirm_password");
-	checkEmptyAndSpaces(pass[0]);
-	checkEmptyAndSpaces(cpass[0]);
+	checkEmptyAndSpaces(this);
+		
 	
 
 	if(pass[0].value !== cpass[0].value)
@@ -90,8 +95,8 @@ function checkNumber()
 	var counter = 0;
 	var len = this.value.length;
 	var pno = document.getElementsByName("phoneno");
-	checkEmptyAndSpaces(this);
-	//checkEmptyAndSpaces(pno[1]);
+	if(checkEmptyAndSpaces(this))
+		return;
 	if(len < 10 && len > 0)
 		generateErrors("Field cannot be less than 10 digits" , this);
 	else if(pno[0].value === pno[1].value && len > 0)
@@ -114,7 +119,8 @@ function checkNumber()
 function checkEmail()
 {
 	
-	checkEmptyAndSpaces(this);
+	if(checkEmptyAndSpaces(this))
+		return;
 	var counter_d=0,counter_p=0;
 	var val = this.value;
 	var atloc = val.indexOf("@");
@@ -132,28 +138,16 @@ function checkEmail()
 			var unicode = personalInfo.charCodeAt(iterator);
 		
 			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122) || (charAllowed.indexOf(personalInfo[iterator]) !== -1) || (unicode>=48 && unicode<=57))
-			{
-				if(iterator === 0 )
-					console.log("Entered1");
+			
 				counter_p++;
-		//		console.log()
-			}
+			
 			if(unicode === 46)
 			{
 				
-				if(iterator !== 0 || iterator !== personalInfo.length-1 || (personalInfo[iterator+1] !== "."))
-				{
-					console.log(iterator !== 0 || iterator !== personalInfo.length-1 );
-					if(iterator === 0 )
-						console.log(iterator,"Entered2");
-				
-					counter_p++;
-					//console.log("Executed");
-				}
+				if(iterator !== 0 && iterator !== personalInfo.length-1 && personalInfo[iterator+1] !== ".")
+					counter_p++;	
 			}
 		}
-		console.log(counter_p);
-	
 		if(counter_p !== personalInfo.length)
 			return false;
 		else
@@ -170,15 +164,12 @@ function checkEmail()
 			
 			if(unicode === 46)
 			{
-	//			console.log(iterator,unicode);
-				if(iterator !== 0 || iterator !== domainInfo.length-1 || (domainInfo[iterator+1] !== ".") || (domainInfo[iterator+2] !== "."))
+				if(iterator !== 0 && iterator !== domainInfo.length-1 && (domainInfo[iterator+1] !== ".") &&iterator !== domainInfo.length-2 && (domainInfo[iterator+2] !== "."))
 					counter_d++;
 			}
 			
 		
 		}
-		console.log(counter_d);
-	
 		if(counter_d !== domainInfo.length)
 			return false;
 		else
@@ -187,14 +178,14 @@ function checkEmail()
 	
 	if(checkDinfo() === false || checkPinfo() === false)
 		generateErrors("Invalid Email Address",this);
-	console.log(counter_p,counter_d);
+		
 	
 	return;
 }
 function generateErrors(errormssg,name)
 {
 	var em = document.createElement("p");
-	if(name.classList.contains("required") && name.value.length === 0)
+	if(name.classList.contains("required") && errormssg.length === 0)
 		em.appendChild(document.createTextNode("This field cannot be empty"));
 	else	
 		em.appendChild(document.createTextNode(errormssg));
@@ -316,9 +307,12 @@ function checkEmptyAndSpaces(name)
 	}
 	name.value = temp;
 	if(temp.length === 0)
+	{	
 		generateErrors("",name);
-
-	return;
+		return true;
+	}
+	else
+		return false;
 	
 }
     

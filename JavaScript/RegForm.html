@@ -32,8 +32,8 @@
           <input type="password" id="cpassword" name="user_confirm_password" maxlength="10" class="required">
           
           <label class="required" class="required">Gender</label>
-				<input type="radio" name="gender"  class="required">Male
-				<input type="radio" name="gender" value="Female" class="required">Female	
+				<input type="radio" name="gender"  id="gn_male" class="required"><label class="light" for="gn_male" >Male</label>
+				<input type="radio" name="gender" id="gn_female" class="required"><label class="light" for="gn_female" >Female</label>
           
           <label class="required">Phone Number </label><input type="text" name="phoneno" maxlength="10" placeholder="Phone Number" class="required">
 			<label> Alternate Phone Number </label><input type="text" name="phoneno" maxlength="10" placeholder="Alternate Phone number" >
@@ -66,11 +66,11 @@
         <fieldset>  
        
         <legend><span class="number">3</span>Personal Interests</legend>
-        <label>Subscribe News Letter?</label><input type="radio" name="subs_value" value="Male">Yes
-									 <input type="radio" name="subs_value" value="Female">No
+        <label>Subscribe News Letter?</label><input type="radio"  id="in_yes" name="subs_value" value="Male"><label class="light" for="in_yes" >Yes</label>
+									 <input type="radio" id="in_no" name="subs_value" value="Female"><label class="light" for="in_no" >No</label>
         
           <label>Interests:</label>
-          <input type="checkbox" id="Sports" value="interest_sports" name="user_interest"><label class="light" for="sports">Sports</label><br>
+          <input type="checkbox" id="sports" value="interest_sports" name="user_interest"><label class="light" for="sports">Sports</label><br>
           <input type="checkbox" id="books" value="interest_books" name="user_interest"><label class="light" for="books">Books</label><br>
           <input type="checkbox" id="fashion" value="interest_fashion" name="user_interest"><label class="light" for="fashion">Fashion</label><br>
           <input type="checkbox" id="gaming" value="interest_gaming" name="user_interest"><label class="light" for="gaming">Gaming</label><br>
