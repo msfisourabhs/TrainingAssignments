@@ -128,8 +128,8 @@ function checkNumber()
 	
 	var counter = 0;
 	var len = this.value.length;
-	var pno_1 = $("#phoneno_1");
-	var pno_2 = $("#phoneno_2");
+	var pno_1 = $("#phoneno_1")[0];
+	var pno_2 = $("#phoneno_2")[0];
 	
 	if(checkEmptyAndSpaces.call(this))
 		return;
@@ -156,12 +156,10 @@ function generateErrors(errormssg,name)
 {
 	$(name).before("<p class=\"errors\"></p>");
 	var errorElement = $(name).prev();
-	
+	errorElement.hide();
 	if(name.classList.contains("required") && errormssg.length === 0)
-	{
 		errorElement.text("This field cannot be empty");
-		errorElement.hide();
-	}
+		
 	else	
 		errorElement.text(errormssg);
 	errorElement.show("slow");	
@@ -174,14 +172,7 @@ function clearErrors()
 	for(var iterator =0 ; iterator<err.length;iterator++)
 	{
 		if(err.eq(iterator).next()[0] === this)		
-		{
-			err.eq(iterator).hide("slow",function(){
-			try{	
-				err[iterator].remove();
-			}
-			catch(e){}
-			});
-		}
+			err[iterator].remove();
 	}
 	return;
 }
@@ -202,7 +193,7 @@ function validate()
 			if(lbl[iterator].nextElementSibling.classList.contains("errors"))
 			{	
 				counter++;
-				console.log(lbl[iterator].nextElementSibling);
+				console.log(lbl[iterator]);
 			}	
 		}
 	}
