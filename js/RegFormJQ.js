@@ -2,32 +2,41 @@ $(document).ready(addHandlers());
 
 function addHandlers(){
 	createCaptcha();
-	$(".name").bind("blur",checkWord);
-	$(".name").bind("focus",clearErrors);
+	$("#fname").bind("blur",checkWord);
+	$("#fname").bind("focus",clearErrors);
+	
+	$("#lname").bind("blur",checkWord);
+	$("#lname").bind("focus",clearErrors);
 	
 	
 	$("#cpassword").bind("blur",checkPass);
 	$("#cpassword").bind("focus",clearErrors);
+	
+	$("#password").bind("blur",checkEmptyAndSpaces);
 	$("#password").bind("focus",clearErrors);
 	
-	$("#mail").bind("blur",checkRest);
+	$("#mail").bind("blur",checkEmail);
 	$("#mail").bind("focus",clearErrors);
 	
+	$("#phoneno_1").bind("blur",checkNumber);
+	$("#phoneno_1").bind("focus",clearErrors);
 	
-	$(".phoneno").bind("blur",checkNumber);
-	$(".phoneno").bind("focus",clearErrors);
-	
-	
+	$("#phoneno_2").bind("blur",checkNumber);
+	$("#phoneno_2").bind("focus",clearErrors);
+		
 
-	$(".addr").bind("blur",checkRest);
-	$(".addr").bind("focus",clearErrors);
+	$("#corrsp_p").bind("blur",checkEmptyAndSpaces);
+	$("#corrsp_p").bind("focus",clearErrors);
+
+	$("#corrsp_c").bind("blur",checkEmptyAndSpaces);
+	$("#corrsp_c").bind("focus",clearErrors);
 
 	
-	$("#countryId").bind("blur",checkRest);
+	$("#countryId").bind("blur",checkEmptyAndSpaces);
 	$("#countryId").bind("focus",clearErrors);
 	
 	
-	$("#stateId").bind("blur",checkRest);
+	$("#stateId").bind("blur",checkEmptyAndSpaces);
 	$("#stateId").bind("focus",clearErrors);
 	
 	
@@ -41,7 +50,7 @@ function createCaptcha()
 {
 	var cap = $("#captcha");
 	var opvalue = function(){
-		var op = parseInt(Math.random() * (5 - 1) + 1);
+		var op = parseInt(Math.random() * (4) + 1);
 		if(op === 1)
 			return "+";
 		else if(op === 2)
@@ -52,8 +61,8 @@ function createCaptcha()
 			return "/";
 	};
 	cap.text(parseInt(Math.random()*10 + 1) + opvalue() + parseInt(Math.random()*10 + 1)); 	
+	
 	document.getElementById('capval').value = "";
-	//$("#capval").html("   ");
 }
 
 
@@ -65,42 +74,39 @@ function checkCaptcha()
 
 	if(($("#capval").val()) === parseInt(eval($("#captcha").html())).toString())
 	{
-		$("button")[2].removeAttribute = "disabled";
+		$("#submitbttn")[0].removeAttribute("disabled");
 		capmssg.html(" &#10004 Captcha Input was Ok.You can Sign Up Now");
 		capmssg.css("color","Green");
-		//document.getElementById("capmssg").style.animationName = "example";
 		
 	}
 	else
 	{
-		$("button")[2].setAttribute("disabled","true");
+		$("#submitbttn")[0].setAttribute("disabled","true");
 		capmssg.html(" &#10006 Captcha input was incorrect.Please try again.");
 		capmssg.css("color","Red");
 		createCaptcha();
 		
 	}
-	setTimeout(function(){
-		capmssg.css("visibility","hidden");
-		capmssg.css("display","none");
-	},5000);
+	capmssg.hide(3000);
+	
 }
 
 
 function checkWord()
 {
-		if(checkEmptyAndSpaces(this))
-			return;
-		var counter=0;
-		var len = this.value.length;
-		for(var iterator=0 ; iterator<len; iterator++)
-		{
-			var unicode = this.value.charCodeAt(iterator);
-			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122))
-					counter++;
-		}
+	if(checkEmptyAndSpaces.call(this))
+		return;
+	var counter=0;
+	var len = this.value.length;
+	for(var iterator=0 ; iterator<len; iterator++)
+	{
+		var unicode = this.value.charCodeAt(iterator);
+		if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122))
+				counter++;
+	}
 		
-		if(counter !== len)
-			generateErrors("Does not contain letters",this);
+	if(counter !== len)
+		generateErrors("Does not contain letters",this);
 			
 	return;
 }
@@ -108,128 +114,202 @@ function checkWord()
 function checkPass()
 {
 	var pass = $(".pass");
-	checkEmptyAndSpaces(this);
+	if(checkEmptyAndSpaces.call(this));
+		return;
+
 	if(pass[0].value !== pass[1].value)
 		generateErrors("Passwords do not match",pass[1]);		
-	
 	return;
 	
 }	
-	
 
 function checkNumber()
 {
-	var c = 1; 
-	var pno = $(".phoneno");
-	if(this.value.length === 0)
-		generateErrors("",this);
-	else if(this.value.length < 10)
+	
+	var counter = 0;
+	var len = this.value.length;
+	var pno_1 = $("#phoneno_1");
+	var pno_2 = $("#phoneno_2");
+	
+	if(checkEmptyAndSpaces.call(this))
+		return;
+	if(len < 10 && len > 0)
 		generateErrors("Field cannot be less than 10 digits" , this);
-	else if(pno[0].value === pno[1].value)
-		generateErrors("Number should be different form primary number",pno[1]);
+	else if(pno_1.value === pno_2.value && len > 0)
+		generateErrors("Number should be different form primary number",pno_2);
 	else
 	{
-		for(var i = 0; i<this.value.length;i++)
+		for(var iterator = 0; iterator<len ; iterator++)
 		{
 			
-			var unicode = this.value.charCodeAt(i);
+			var unicode = this.value.charCodeAt(iterator);
 			if(unicode >=48 && unicode <= 57)
-				c++;
+				counter++;
 		}
-		if(c === this.value.length)
-			console.log("Phone Number OK");
-		else
-		{
-			console.log("Phone Number dosen't contains number");
-			generateErrors("Phone Number dosen't contains number",this);
-		}
+		if(counter !== len)
+			generateErrors("Phone Number does not contain numbers",this);
+		
 	}
 	return;
 }
 function generateErrors(errormssg,name)
 {
-	if(name.hasAttribute("required") && name.value === "")
-		$(name).before("<p class=\"errors\"> This field cannot be empty </p>");
+	$(name).before("<p class=\"errors\"></p>");
+	var errorElement = $(name).prev();
+	
+	if(name.classList.contains("required") && errormssg.length === 0)
+	{
+		errorElement.text("This field cannot be empty");
+		errorElement.hide();
+	}
 	else	
-		$(name).before("<p class=\"errors\">" + errormssg + "</p>");
-		
+		errorElement.text(errormssg);
+	errorElement.show("slow");	
 	
 	return;
 }
 function clearErrors()
 {
 	var err = $("fieldset").find("p");
-	for(var i =0 ; i<err.length;i++)
+	for(var iterator =0 ; iterator<err.length;iterator++)
 	{
-		if(err.eq(i).next()[0] === this)
-		{			
-			err[i].remove();
-			console.log("Removed successfully");
+		if(err.eq(iterator).next()[0] === this)		
+		{
+			err.eq(iterator).hide("slow",function(){
+			try{	
+				err[iterator].remove();
+			}
+			catch(e){}
+			});
 		}
-		
 	}
 	return;
 }
-function checkRest()
-{
-	if(this.value.length === 0)
-		generateErrors("",this);
-}
-
 function validate()
 {
-	console.log("validation called");
-	var c = 0;
-	//var lbl = document.getElementsByTagName('label');
-	var err  = $("fieldset").find("p");
-	for(var i = 0;i<err.length;i++)
+	var counter = 0;
+	var lbl = $('label');
+	var inputs = $("input");
+	for(var iterator = 0;iterator<inputs.length;iterator++)
 	{
-		if(err[i].className === "required")
+		clearErrors.call(inputs[iterator]);
+		checkEmptyAndSpaces.call(inputs[iterator]);
+	}
+	for(var iterator = 0;iterator<lbl.length;iterator++)
+	{
+		if(lbl[iterator].classList.contains("required"))
 		{
-			if(lbl[i].nextElementSibling.className === "errors")
-			{
-				
-				c++;
-			}
-			
+			if(lbl[iterator].nextElementSibling.classList.contains("errors"))
+			{	
+				counter++;
+				console.log(lbl[iterator].nextElementSibling);
+			}	
 		}
 	}
-	if(c === 0)
+	$("#val").hide();
+	if(counter === 0)
 	{
 		alert("Registered successfully");
-		console.log("Valodation successful");
+		
 		return true;	
 		
 	}
 	else
 	{
-		document.getElementById("val").innerHTML = "There were errors in your submission";
-		document.getElementById("val").setAttribute("class","valmssg");
+		$("#val").html("There were errors in your submission");
+		$("#val")[0].setAttribute("class","valmssg");
+		$("#val").toggle("slow");
 		document.body.scrollTop = "0";
 	
 		return false;
 	}
-}
-function checkEmptyAndSpaces(name)
-{
 	
-	var val = name.value;
-	var len = name.value.length;
+}
+
+function checkEmptyAndSpaces()
+{
+	var val = this.value;
+	var len = this.value.length;
 	var temp = "";
 	for(iterator = 0 ; iterator < len ; iterator++)
 	{
 		if(val.charAt(iterator) !== " ")
 			temp +=  val.charAt(iterator).toString();
 	}
-	name.value = temp;
+	this.value = temp;
 	if(temp.length === 0)
 	{	
-		generateErrors("",name);
+		generateErrors("",this);
 		return true;
 	}
 	else
 		return false;
 	
 }
-
+function checkEmail()
+{
+	
+	if(checkEmptyAndSpaces.call(this))
+		return;
+	var counter_d=0,counter_p=0;
+	var val = this.value;
+	var atloc = val.indexOf("@");
+	var charAllowed = ["!","#","$","%","&","'","*","+","-","/","=","?","^","_","`","{","}","|","~"];
+	if(atloc === 0 || atloc === val.length-1 || atloc !== val.lastIndexOf("@") || atloc === -1)
+	{
+		generateErrors("Invalid Email Address",this);
+		return;
+	}
+	var personalInfo = val.split("@")[0];
+	var domainInfo = val.split("@")[1];
+	var checkPinfo = function(){
+		for(var iterator = 0 ; iterator<personalInfo.length ; iterator++)
+		{
+			var unicode = personalInfo.charCodeAt(iterator);
+		
+			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122) || (charAllowed.indexOf(personalInfo[iterator]) !== -1) || (unicode>=48 && unicode<=57))
+			
+				counter_p++;
+			
+			if(unicode === 46)
+			{
+				
+				if(iterator !== 0 && iterator !== personalInfo.length-1 && personalInfo[iterator+1] !== ".")
+					counter_p++;	
+			}
+		}
+		if(counter_p !== personalInfo.length)
+			return false;
+		else
+			return true;
+	};
+	
+	
+	var checkDinfo = function(){
+		for(var iterator = 0 ; iterator<domainInfo.length ; iterator++)
+		{
+			var unicode = domainInfo.charCodeAt(iterator);
+			if((unicode >= 65 && unicode <=90) || (unicode >= 97 && unicode <= 122) || (unicode === 45) || (unicode>=48 && unicode<=57))
+				counter_d++;
+			
+			if(unicode === 46)
+			{
+				if(iterator !== 0 && iterator !== domainInfo.length-1 && (domainInfo[iterator+1] !== ".") &&iterator !== domainInfo.length-2 && (domainInfo[iterator+2] !== "."))
+					counter_d++;
+			}
+			
+		
+		}
+		if(counter_d !== domainInfo.length)
+			return false;
+		else
+			return true;
+	};
+	
+	if(checkDinfo() === false || checkPinfo() === false)
+		generateErrors("Invalid Email Address",this);
+		
+	
+	return;
+}
 

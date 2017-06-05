@@ -15,7 +15,7 @@ function addHandlers()
 	var pass = document.getElementsByName("user_password");
 	var cpass = document.getElementsByName("user_confirm_password");
 	pass[0].addEventListener("focus" , clearErrors);
-	pass[0].addEventListener("blur" , checkRest);
+	pass[0].addEventListener("blur" , checkEmptyAndSpaces);
 	
 	cpass[0].addEventListener("focus" , clearErrors);
 	cpass[0].addEventListener("blur" , checkPass);
@@ -39,26 +39,26 @@ function addHandlers()
 	email.addEventListener("focus",clearErrors);
 
 	var caddr = document.getElementsByName("caddress");
-	caddr[0].addEventListener("blur",checkRest);
+	caddr[0].addEventListener("blur",checkEmptyAndSpaces);
 	caddr[0].addEventListener("focus",clearErrors);
 
 	var paddr = document.getElementsByName("paddress");
-	paddr[0].addEventListener("blur",checkRest);
+	paddr[0].addEventListener("blur",checkEmptyAndSpaces);
 	paddr[0].addEventListener("focus",clearErrors);
 
 	var country = document.getElementsByName("country");
-	country[0].addEventListener("blur",checkRest);
+	country[0].addEventListener("blur",checkEmptyAndSpaces);
 	country[0].addEventListener("focus",clearErrors);
 
 	var state = document.getElementsByName("state");
-	state[0].addEventListener("blur",checkRest);
+	state[0].addEventListener("blur",checkEmptyAndSpaces);
 	state[0].addEventListener("focus",clearErrors);
 	
 	return;
 }
 function checkWord()
 {
-		if(checkEmptyAndSpaces(this))
+		if(checkEmptyAndSpaces.call(this))
 			return;
 		var counter=0;
 		var len = this.value.length;
@@ -79,7 +79,7 @@ function checkPass()
 	
 	var pass = document.getElementsByName("user_password");
 	var cpass = document.getElementsByName("user_confirm_password");
-	checkEmptyAndSpaces(this);
+	checkEmptyAndSpaces.call(this);
 		
 	
 
@@ -95,7 +95,7 @@ function checkNumber()
 	var counter = 0;
 	var len = this.value.length;
 	var pno = document.getElementsByName("phoneno");
-	if(checkEmptyAndSpaces(this))
+	if(checkEmptyAndSpaces.call(this))
 		return;
 	if(len < 10 && len > 0)
 		generateErrors("Field cannot be less than 10 digits" , this);
@@ -119,7 +119,7 @@ function checkNumber()
 function checkEmail()
 {
 	
-	if(checkEmptyAndSpaces(this))
+	if(checkEmptyAndSpaces.call(this))
 		return;
 	var counter_d=0,counter_p=0;
 	var val = this.value;
@@ -263,7 +263,7 @@ function validate()
 	for(var iterator = 0;iterator<inputs.length;iterator++)
 	{
 		clearErrors.call(inputs[iterator]);
-		checkEmptyAndSpaces(inputs[iterator]);
+		checkEmptyAndSpaces.call(inputs[iterator]);
 	}
 	for(var iterator = 0;iterator<lbl.length;iterator++)
 	{
@@ -290,25 +290,22 @@ function validate()
 	}
 	
 }
-function checkRest()
-{
-	checkEmptyAndSpaces(this);
-}
-function checkEmptyAndSpaces(name)
+
+function checkEmptyAndSpaces()
 {
 	
-	var val = name.value;
-	var len = name.value.length;
+	var val = this.value;
+	var len = this.value.length;
 	var temp = "";
 	for(iterator = 0 ; iterator < len ; iterator++)
 	{
 		if(val.charAt(iterator) !== " ")
 			temp +=  val.charAt(iterator).toString();
 	}
-	name.value = temp;
+	this.value = temp;
 	if(temp.length === 0)
 	{	
-		generateErrors("",name);
+		generateErrors("",this);
 		return true;
 	}
 	else
