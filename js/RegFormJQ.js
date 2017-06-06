@@ -156,7 +156,8 @@ function generateErrors(errormssg,name)
 {
 	$(name).before("<p class=\"errors\"></p>");
 	var errorElement = $(name).prev();
-	errorElement.hide();
+	if(name.classList.contains("required"))
+		errorElement.hide();
 	if(name.classList.contains("required") && errormssg.length === 0)
 		errorElement.text("This field cannot be empty");
 		
